@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{fragments/headers :: header}">
+    <style>
+        .form-card { max-width: 800px; margin: 2rem auto; background:#fff; padding:1.5rem; border-radius:.75rem; }
+    </style>
+    <title>Inscripción - NakMuay</title>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container form-card">
+        <h2 class="mb-3">Formulario de Inscripción</h2>
+        <p class="text-muted">Completa los datos para inscribirte o inscribir a tu hijo/a.</p>
+        <form action="/inscripcion" method="post">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Nombre completo</label>
+                    <input name="nombre" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Edad</label>
+                    <input name="edad" type="number" min="1" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input name="email" type="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Dirección</label>
+                <input name="direccion" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">¿Trabaja o estudia?</label>
+                <select name="trabajaEstudia" class="form-control">
+                    <option>Trabaja</option>
+                    <option>Estudia</option>
+                    <option>Ambos</option>
+                    <option>No aplica</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tutor (si aplica)</label>
+                <input name="tutor" class="form-control" placeholder="Nombre del tutor o responsable">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Plan</label>
+                <select name="plan" class="form-control" required>
+                    <option value="2x">2 veces por semana</option>
+                    <option value="3x">3 veces por semana</option>
+                    <option value="full">Full (Lunes a Viernes)</option>
+                </select>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Día deseado para la clase de prueba</label>
+                    <input name="fechaPrueba" type="date" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Hora preferida</label>
+                    <input name="horaPrueba" type="time" class="form-control">
+                    <div class="form-text">Si no especificas hora intentaremos coordinar la mejor disponibilidad.</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Comentarios adicionales</label>
+                <textarea name="comentarios" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Enviar inscripción</button>
+        </form>
+    </div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

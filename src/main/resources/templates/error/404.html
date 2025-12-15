@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/headers :: header}">
+    <meta charset="UTF-8">
+    <title>Página no encontrada</title>
+    <style>
+        .error-container { text-align: center; padding: 4rem 1rem; }
+        .error-image { max-width: 420px; width: 80%; height: auto; margin-bottom: 1.5rem; }
+    </style>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container error-container">
+        <img th:src="@{/img/404-image.png}" src="/img/404-image.png" alt="404" class="error-image"/>
+        <h1 class="display-5">Página no encontrada (404)</h1>
+        <p class="lead">Lo sentimos, la página que buscas no existe o fue movida.</p>
+        <a href="/" class="btn btn-primary mt-3">Volver al inicio</a>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

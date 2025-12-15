@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/headers :: header}">
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        .error-container { text-align: center; padding: 4rem 1rem; }
+    </style>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container error-container">
+        <h1 class="display-5">Ha ocurrido un error</h1>
+        <p class="lead">Lo sentimos, algo salió mal. Intenta nuevamente más tarde.</p>
+        <a href="/" class="btn btn-primary mt-3">Volver al inicio</a>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/headers :: header}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login de Usuario</title>
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .card {
+            background: #fff;
+            border-radius: 1rem;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .navbar-custom {
+            background-color: #343a40;
+        }
+        .navbar-custom .nav-link {
+            color: #fff !important;
+        }
+        .navbar-custom .nav-link.active, 
+        .navbar-custom .nav-link:hover {
+            color: #007bff !important;
+            background-color: #e9ecef !important;
+            border-radius: .25rem;
+        }
+        .table-actions .btn {
+            margin-right: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <!-- thymeleaf para listar usuarios -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Lista de Usuarios</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.nombre} + ' ' + ${u.apellido}">Nombre Apellido</td>
+                    <td th:text="${u.email}">correo</td>
+                    <td th:text="${u.rol}">ROL</td>
+                    <td>
+                        <span th:if="${u.enabledField}" class="badge bg-success">Activo</span>
+                        <span th:if="${!u.enabledField}" class="badge bg-secondary">Inactivo</span>
+                    </td>
+                    <td class="table-actions">
+                        <a th:href="@{'/user/view/' + ${u.id}}" class="btn btn-info btn-sm">Ver</a>
+                        <a th:href="@{'/user/edit/' + ${u.id}}" class="btn btn-warning btn-sm">Editar</a>
+                        <a th:href="@{'/user/toggle/' + ${u.id}}" class="btn btn-secondary btn-sm" th:text="${u.enabledField} ? 'Desactivar' : 'Activar'">Toggle</a>
+                        <a th:href="@{'/user/delete/' + ${u.id}}" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar usuario?');">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/user/create" class="btn btn-primary">Crear Usuario</a>
+    </div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

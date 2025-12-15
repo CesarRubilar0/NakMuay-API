@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{fragments/headers :: header}">
+    <title>Quiénes somos - NakMuay</title>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="container py-5">
+        <h2 class="mb-4">Quiénes somos</h2>
+        <p>Nak muay es un gimnasio de Muay Thai.
+
+
+
+Fundado en el año 2018, con un enfoque social, busca brindar un espacio seguro a la comunidad para realizar actividad física, promover valores deportivos y apoyar el desarrollo personal.</p>
+
+        <h3 class="mt-4">Instructores</h3>
+        <div class="row mt-3">
+            <div class="col-md-4 text-center mb-3">
+                <img th:src="@{/img/Andres.jpg}" src="/img/Andres.jpg" alt="Andrés" class="img-fluid rounded" onerror="this.onerror=null;this.src='/img/placeholder.svg'"/>
+                <h5 class="mt-2">Instructor A</h5>
+                <p>Entrenador principal, 10 años de experiencia.</p>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <img th:src="@{/img/Bastian.jpg}" src="/img/Bastian.jpg" alt="Instructor 2" class="img-fluid rounded" onerror="this.onerror=null;this.src='/img/placeholder.svg'"/>
+                <h5 class="mt-2">Instructor B</h5>
+                <p>Especialista en entrenamiento infantil y técnica.</p>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <img th:src="@{/img/Enzo.jpg}" src="/img/Enzo.jpg" alt="Instructor 3" class="img-fluid rounded" onerror="this.onerror=null;this.src='/img/placeholder.svg'"/>
+                <h5 class="mt-2">Instructor C</h5>
+                <p>Preparador físico y acondicionamiento.</p>
+            </div>
+        </div>
+
+        <h3 class="mt-4">Historia</h3>
+        <p>Desde nuestros inicios hemos promovido el Muay Thai como deporte y cultura, integrando técnicas tradicionales con métodos modernos de preparación.</p>
+        
+    <h3 class="mt-5">Horarios</h3>
+    <p><strong>Nuestro horario de Muay Thai</strong> está diseñado para adaptarse a diferentes necesidades y disponibilidades. Ofrecemos una amplia variedad de opciones para garantizar que todos puedan disfrutar de nuestras clases. A continuación presentamos la sección de horarios en la tabla, donde podrás ver las franjas horarias disponibles y planear tu inscripción o clase de prueba.</p>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Hora</th>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>9:00 - 10:00</td>
+                        <td>Muay Thai</td>
+                        <td></td>
+                        <td>Muay Thai</td>
+                        <td></td>
+                        <td>Muay Thai</td>
+                    </tr>
+                    <tr>
+                        <td>17:00 - 18:00</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                    </tr>
+                    <tr>
+                        <td>18:00 - 19:00</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                    </tr>
+                    <tr>
+                        <td>19:00 - 20:00</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                    </tr>
+                    <tr>
+                        <td>20:00 - 21:00</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                        <td>Muay Thai</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

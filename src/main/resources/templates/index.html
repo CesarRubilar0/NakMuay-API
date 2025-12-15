@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments/headers :: header}">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .main-content {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .services-section {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+    <div class="main-content bg-dark text-white w-100 py-5">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold">NakMuay - Academia de Muay Thai</h1>
+            <p class="lead">Entrena con los mejores instructores. Clases para todas las edades y niveles.</p>
+            <div class="mt-4">
+                <a href="/inscripcion" class="btn btn-primary btn-lg me-2">Reserva tu clase de Prueba aqui</a>
+                <a href="/contacto" class="btn btn-outline-light btn-lg">¿Dudas? contactanos</a>
+                <a href="/login" class="btn btn-light btn-lg ms-2">Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+    <div class="container services-section">
+        <h2 class="text-center mb-4">Servicios y Planes</h2>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Clases 2 veces por semana</h5>
+                        <p class="card-text">Plan económico ideal para mantener actividad física y técnica básica.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Clases 3 veces por semana</h5>
+                        <p class="card-text">Plan intermedio para progresar rápidamente y mejorar condición.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Plan Full (Lunes a Viernes)</h5>
+                        <p class="card-text">Entrenamiento intensivo y técnico, acceso completo a las instalaciones.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col text-center">
+                <p class="mb-0">¿Quieres saber más? <a href="/contacto" class="btn btn-outline-primary ms-2">Contáctanos</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h3 class="text-center mb-3">Dónde encontrarnos</h3>
+        <div class="mx-auto" style="max-width:800px;">
+            <div class="ratio ratio-4x3">
+                <iframe src="https://www.google.com/maps?q=Profesor+Dario+Salazar+1779+Cerro+Navia&output=embed" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            <p class="text-center small mt-2 mb-0">Profesor Dario Salazar 1779, Cerro Navia</p>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
