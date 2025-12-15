@@ -1,0 +1,15 @@
+target
+.git
+.gitignore
+.mvn
+.DS_Store
+*.log
+.env
+node_modules
+Moviles
+IPSS-2 Año
+.vscode
+.idea
+*.swp
+*.swo
+*~
