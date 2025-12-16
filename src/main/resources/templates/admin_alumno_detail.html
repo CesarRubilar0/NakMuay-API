@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/headers :: header}">
+    <title>Detalle del Alumno</title>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container my-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Detalle del Alumno</h1>
+            <a th:href="@{/admin/alumnos}" class="btn btn-secondary">Volver</a>
+        </div>
+
+        <!-- Información del alumno -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Información Personal</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>ID:</strong> <span th:text="${alumno.id}">1</span></p>
+                        <p><strong>RUT:</strong> <span th:text="${alumno.rut}">12345678-9</span></p>
+                        <p><strong>Nombre:</strong> <span th:text="${alumno.nombre}">Nombre</span></p>
+                        <p><strong>Apellido:</strong> <span th:text="${alumno.apellido}">Apellido</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Email:</strong> <span th:text="${alumno.email}">email@example.com</span></p>
+                        <p><strong>Rol:</strong> <span class="badge" 
+                              th:classappend="${alumno.rol == 'ROLE_ADMIN' ? 'bg-danger' : 'bg-primary'}"
+                              th:text="${alumno.rol}">Rol</span></p>
+                        <p><strong>Estado:</strong>
+                            <span th:if="${alumno.enabled}" class="badge bg-success">Activo</span>
+                            <span th:unless="${alumno.enabled}" class="badge bg-secondary">Inactivo</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Membresía actual -->
+        <div th:if="${tieneMembresia}" class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Membresía Activa</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 th:text="${membresiaActual.plan.nombre}">Plan</h4>
+                        <p th:text="${membresiaActual.plan.descripcion}">Descripción</p>
+                        <p><strong>Precio:</strong> $<span th:text="${membresiaActual.plan.precio}">0</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Fecha de inicio:</strong> <span th:text="${#temporals.format(membresiaActual.fechaInicio, 'dd/MM/yyyy')}">01/01/2024</span></p>
+                        <p><strong>Fecha de fin:</strong> <span th:text="${#temporals.format(membresiaActual.fechaFin, 'dd/MM/yyyy')}">31/12/2024</span></p>
+                        <p><strong>Duración:</strong> <span th:text="${membresiaActual.plan.duracionMeses}">0</span> meses</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sin membresía -->
+        <div th:unless="${tieneMembresia}" class="alert alert-warning">
+            <strong>Este alumno no tiene ninguna membresía activa.</strong>
+        </div>
+
+        <!-- Historial de membresías -->
+        <div th:if="${historialMembresias != null and !historialMembresias.isEmpty()}" class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Historial de Membresías</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Plan</th>
+                                <th>Precio</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="membresia : ${historialMembresias}">
+                                <td th:text="${membresia.plan.nombre}">Plan</td>
+                                <td>$<span th:text="${membresia.plan.precio}">0</span></td>
+                                <td th:text="${#temporals.format(membresia.fechaInicio, 'dd/MM/yyyy')}">01/01/2024</td>
+                                <td th:text="${#temporals.format(membresia.fechaFin, 'dd/MM/yyyy')}">31/12/2024</td>
+                                <td>
+                                    <span th:if="${membresia.activa}" class="badge bg-success">Activa</span>
+                                    <span th:unless="${membresia.activa}" class="badge bg-secondary">Inactiva</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/inscripcion", true)
                 .permitAll()
             )
             .logout(logout -> logout

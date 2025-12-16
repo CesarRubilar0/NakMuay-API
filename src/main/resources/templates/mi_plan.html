@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head th:replace="~{fragments/headers :: header}">
+    <title>Mi Plan - DemoMarcial</title>
+</head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <div class="container my-5">
+        <h1 class="mb-4">Mi Plan</h1>
+
+        <!-- Mensajes de éxito/error -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Membresía actual -->
+        <div th:if="${tieneMembresia}" class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Tu Plan Actual</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 th:text="${membresiaActual.plan.nombre}">Nombre del Plan</h4>
+                        <p th:text="${membresiaActual.plan.descripcion}">Descripción</p>
+                        <p class="mb-0"><strong>Precio:</strong> $<span th:text="${membresiaActual.plan.precio}">0</span></p>
+                        <p class="mb-0"><strong>Duración:</strong> <span th:text="${membresiaActual.plan.duracionMeses}">0</span> meses</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-0"><strong>Fecha de inicio:</strong> <span th:text="${#temporals.format(membresiaActual.fechaInicio, 'dd/MM/yyyy')}">01/01/2024</span></p>
+                        <p class="mb-0"><strong>Fecha de fin:</strong> <span th:text="${#temporals.format(membresiaActual.fechaFin, 'dd/MM/yyyy')}">31/12/2024</span></p>
+                        <p class="mb-0">
+                            <strong>Estado:</strong> 
+                            <span th:if="${membresiaActual.activa}" class="badge bg-success">Activa</span>
+                            <span th:unless="${membresiaActual.activa}" class="badge bg-secondary">Inactiva</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#cambiarPlanModal">
+                        Cambiar Plan
+                    </button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelarModal">
+                        Cancelar Membresía
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horarios de entrenamiento -->
+        <div th:if="${tieneMembresia and horarios != null}" class="card mb-4">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">Mis Horarios de Entrenamiento</h3>
+                <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#agregarHorarioModal">
+                    + Agregar Horario
+                </button>
+            </div>
+            <div class="card-body">
+                <div th:if="${horarios != null and !horarios.isEmpty()}">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Día</th>
+                                <th>Horario</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="horario : ${horarios}">
+                                <td th:text="${horario.diaSemana}">Lunes</td>
+                                <td th:text="${horario.horaInicio + ' - ' + horario.horaFin}">9:00 - 10:00</td>
+                                <td>
+                                    <form th:action="@{/mi-plan/horario/eliminar/{id}(id=${horario.id})}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este horario?')">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${horarios == null or horarios.isEmpty()}" class="alert alert-info">
+                    No tienes horarios configurados. Agrega tus horarios de entrenamiento.
+                </div>
+            </div>
+        </div>
+
+        <!-- Sin membresía -->
+        <div th:unless="${tieneMembresia}" class="alert alert-info">
+            <h4>No tienes ningún plan activo</h4>
+            <p>Selecciona un plan para comenzar:</p>
+        </div>
+
+        <!-- Planes disponibles -->
+        <div th:if="${!tieneMembresia and planesDisponibles != null and !planesDisponibles.isEmpty()}" class="mb-4">
+            <h3>Planes Disponibles</h3>
+            <div class="row">
+                <div th:each="plan : ${planesDisponibles}" class="col-md-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${plan.nombre}">Plan</h5>
+                            <p class="card-text" th:text="${plan.descripcion}">Descripción</p>
+                            <p class="text-primary fs-4 mb-0">$<span th:text="${plan.precio}">0</span></p>
+                            <p class="text-muted"><span th:text="${plan.duracionMeses}">0</span> meses</p>
+                            <form th:action="@{/mi-plan/contratar}" method="post">
+                                <input type="hidden" name="planId" th:value="${plan.id}"/>
+                                <button type="submit" class="btn btn-primary w-100">Contratar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historial de membresías -->
+        <div th:if="${historialMembresias != null and !historialMembresias.isEmpty()}" class="mt-4">
+            <h3>Historial de Membresías</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Plan</th>
+                        <th>Fecha Inicio</th>
+                        <th>Fecha Fin</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="membresia : ${historialMembresias}">
+                        <td th:text="${membresia.plan.nombre}">Plan</td>
+                        <td th:text="${#temporals.format(membresia.fechaInicio, 'dd/MM/yyyy')}">01/01/2024</td>
+                        <td th:text="${#temporals.format(membresia.fechaFin, 'dd/MM/yyyy')}">31/12/2024</td>
+                        <td>
+                            <span th:if="${membresia.activa}" class="badge bg-success">Activa</span>
+                            <span th:unless="${membresia.activa}" class="badge bg-secondary">Inactiva</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal cambiar plan -->
+    <div class="modal fade" id="cambiarPlanModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cambiar Plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:if="${tieneMembresia}" th:action="@{/mi-plan/cambiar}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="membresiaId" th:value="${membresiaActual?.id}"/>
+                        <p>Selecciona tu nuevo plan:</p>
+                        <select name="nuevoPlanId" class="form-select" required>
+                            <option value="">Selecciona un plan...</option>
+                            <option th:each="plan : ${planesDisponibles}" 
+                                    th:value="${plan.id}" 
+                                    th:text="${plan.nombre + ' - $' + plan.precio + ' (' + plan.duracionMeses + ' meses)'}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">Cambiar Plan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal cancelar membresía -->
+    <div class="modal fade" id="cancelarModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cancelar Membresía</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:if="${tieneMembresia}" th:action="@{/mi-plan/cancelar}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="membresiaId" th:value="${membresiaActual?.id}"/>
+                        <p>¿Estás seguro de que deseas cancelar tu membresía?</p>
+                        <p class="text-danger">Esta acción no se puede deshacer.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, mantener</button>
+                        <button type="submit" class="btn btn-danger">Sí, cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal agregar horario -->
+    <div class="modal fade" id="agregarHorarioModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Horario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:if="${tieneMembresia}" th:action="@{/mi-plan/horario/agregar}" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="membresiaId" th:value="${membresiaActual?.id}"/>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Día de la semana</label>
+                            <select name="dia" class="form-select" required>
+                                <option value="">Selecciona un día...</option>
+                                <option value="Lunes">Lunes</option>
+                                <option value="Martes">Martes</option>
+                                <option value="Miércoles">Miércoles</option>
+                                <option value="Jueves">Jueves</option>
+                                <option value="Viernes">Viernes</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Horario</label>
+                            <select name="horario" class="form-select" required>
+                                <option value="">Selecciona un horario...</option>
+                                <option value="9:00-10:00">9:00 - 10:00</option>
+                                <option value="17:00-18:00">17:00 - 18:00</option>
+                                <option value="18:00-19:00">18:00 - 19:00</option>
+                                <option value="19:00-20:00">19:00 - 20:00</option>
+                                <option value="20:00-21:00">20:00 - 21:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

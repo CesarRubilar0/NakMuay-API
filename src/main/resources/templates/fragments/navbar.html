@@ -21,12 +21,21 @@
                 <li class="nav-item" th:if="${isAuthenticated}">
                     <a class="nav-link" href="/inscripcion">Inscripción</a>
                 </li>
+                <li class="nav-item" th:if="${isAuthenticated}">
+                    <a class="nav-link" href="/mi-plan">Mi Plan</a>
+                </li>
                 <!-- Enlace combinado eliminado: ahora usamos 'Registro' y 'Iniciar sesión' por separado -->
                 <li class="nav-item">
                     <a class="nav-link" href="/contacto">Contacto</a>
                 </li>
                 <li class="nav-item" th:if="${isAdmin}">
                     <a class="nav-link" href="/usuarios_list">Usuarios</a>
+                </li>
+                <li class="nav-item" th:if="${isAdmin}">
+                    <a class="nav-link" href="/admin/alumnos">Alumnos</a>
+                </li>
+                <li class="nav-item" th:if="${isAdmin}">
+                    <a class="nav-link" href="/admin/planes">Planes</a>
                 </li>
                 <li class="nav-item" th:if="${isAuthenticated}">
                     <form th:action="@{/logout}" method="post" class="d-inline-block ms-2">

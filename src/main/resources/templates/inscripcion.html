@@ -9,74 +9,143 @@
 <body class="bg-light">
     <nav th:replace="~{fragments/navbar :: navbar}"></nav>
     <div class="container form-card">
-        <h2 class="mb-3">Formulario de Inscripción</h2>
-        <p class="text-muted">Completa los datos para inscribirte o inscribir a tu hijo/a.</p>
-        <form action="/inscripcion" method="post">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Nombre completo</label>
-                    <input name="nombre" class="form-control" required>
+        <h2 class="mb-3">Inscripción - Selecciona tu Plan</h2>
+        <p class="text-muted">Elige el plan que mejor se adapte a tus necesidades y comienza tu entrenamiento.</p>
+        
+        <!-- Mensaje de éxito -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>¡Inscripción enviada exitosamente!</strong> Te contactaremos pronto para coordinar tu clase de prueba.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- Mensaje de error -->
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <!-- Planes disponibles -->
+        <div class="row mb-4">
+            <div th:each="plan : ${planes}" class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${plan.nombre}">Plan</h5>
+                        <p class="card-text" th:text="${plan.descripcion}">Descripción</p>
+                        <p class="text-primary fs-4 mb-0">$<span th:text="${plan.precio}">0</span></p>
+                        <p class="text-muted"><span th:text="${plan.duracionMeses}">0</span> meses</p>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Edad</label>
-                    <input name="edad" type="number" min="1" class="form-control" required>
-                </div>
             </div>
-
+        </div>
+        
+        <form th:action="@{/inscripcion}" method="post">
             <div class="mb-3">
-                <label class="form-label">Correo electrónico</label>
-                <input name="email" type="email" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Dirección</label>
-                <input name="direccion" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">¿Trabaja o estudia?</label>
-                <select name="trabajaEstudia" class="form-control">
-                    <option>Trabaja</option>
-                    <option>Estudia</option>
-                    <option>Ambos</option>
-                    <option>No aplica</option>
+                <label class="form-label">Selecciona tu Plan *</label>
+                <select name="planId" id="planSelect" class="form-control" required>
+                    <option value="">Elige un plan...</option>
+                    <option th:each="plan : ${planes}" 
+                            th:value="${plan.id}" 
+                            th:attr="data-meses=${plan.duracionMeses}"
+                            th:text="${plan.nombre + ' - $' + plan.precio + ' (' + plan.duracionMeses + ' meses)'}">
+                    </option>
                 </select>
+                <div class="form-text">Selecciona el plan según la cantidad de clases semanales que desees</div>
             </div>
 
+            <!-- Selección de horarios -->
             <div class="mb-3">
-                <label class="form-label">Tutor (si aplica)</label>
-                <input name="tutor" class="form-control" placeholder="Nombre del tutor o responsable">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Plan</label>
-                <select name="plan" class="form-control" required>
-                    <option value="2x">2 veces por semana</option>
-                    <option value="3x">3 veces por semana</option>
-                    <option value="full">Full (Lunes a Viernes)</option>
-                </select>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Día deseado para la clase de prueba</label>
-                    <input name="fechaPrueba" type="date" class="form-control" required>
+                <label class="form-label">Selecciona tus días y horarios de entrenamiento *</label>
+                <div class="form-text mb-2">Elige los días y horarios en los que asistirás</div>
+                
+                <div id="horariosContainer">
+                    <div class="row mb-2">
+                        <div class="col-md-5">
+                            <select name="dias[]" class="form-control" required>
+                                <option value="">Selecciona día...</option>
+                                <option value="Lunes">Lunes</option>
+                                <option value="Martes">Martes</option>
+                                <option value="Miércoles">Miércoles</option>
+                                <option value="Jueves">Jueves</option>
+                                <option value="Viernes">Viernes</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <select name="horarios[]" class="form-control" required>
+                                <option value="">Selecciona horario...</option>
+                                <option value="9:00-10:00">9:00 - 10:00</option>
+                                <option value="17:00-18:00">17:00 - 18:00</option>
+                                <option value="18:00-19:00">18:00 - 19:00</option>
+                                <option value="19:00-20:00">19:00 - 20:00</option>
+                                <option value="20:00-21:00">20:00 - 21:00</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm w-100" onclick="eliminarHorario(this)">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Hora preferida</label>
-                    <input name="horaPrueba" type="time" class="form-control">
-                    <div class="form-text">Si no especificas hora intentaremos coordinar la mejor disponibilidad.</div>
-                </div>
+                
+                <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="agregarHorario()">
+                    + Agregar otro horario
+                </button>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Comentarios adicionales</label>
-                <textarea name="comentarios" class="form-control" rows="3"></textarea>
+                <textarea name="comentarios" class="form-control" rows="3" placeholder="Objetivos, condiciones médicas, etc."></textarea>
             </div>
 
-            <button class="btn btn-primary" type="submit">Enviar inscripción</button>
+            <button class="btn btn-primary btn-lg" type="submit">Confirmar Inscripción</button>
+            <a href="/" class="btn btn-secondary btn-lg">Cancelar</a>
         </form>
     </div>
     <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script>
+        function agregarHorario() {
+            const container = document.getElementById('horariosContainer');
+            const nuevoHorario = `
+                <div class="row mb-2">
+                    <div class="col-md-5">
+                        <select name="dias[]" class="form-control" required>
+                            <option value="">Selecciona día...</option>
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miércoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <select name="horarios[]" class="form-control" required>
+                            <option value="">Selecciona horario...</option>
+                            <option value="9:00-10:00">9:00 - 10:00</option>
+                            <option value="17:00-18:00">17:00 - 18:00</option>
+                            <option value="18:00-19:00">18:00 - 19:00</option>
+                            <option value="19:00-20:00">19:00 - 20:00</option>
+                            <option value="20:00-21:00">20:00 - 21:00</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm w-100" onclick="eliminarHorario(this)">
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', nuevoHorario);
+        }
+
+        function eliminarHorario(button) {
+            const rows = document.querySelectorAll('#horariosContainer .row');
+            if (rows.length > 1) {
+                button.closest('.row').remove();
+            } else {
+                alert('Debes mantener al menos un horario');
+            }
+        }
+    </script>
 </body>
 </html>

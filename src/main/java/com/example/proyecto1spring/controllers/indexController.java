@@ -1,19 +1,30 @@
 package com.example.proyecto1spring.controllers;
 
+import com.example.proyecto1spring.entity.Membresia;
+import com.example.proyecto1spring.entity.Usuario;
+import com.example.proyecto1spring.service.HorarioEntrenamientoService;
+import com.example.proyecto1spring.service.MembresiaService;
+import com.example.proyecto1spring.service.PlanService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class indexController {
 
-    // Almacenamiento simple en memoria para inscripciones (temporal)
-    private final List<Inscripcion> inscripciones = new ArrayList<>();
+    @Autowired
+    private PlanService planService;
+    
+    @Autowired
+    private MembresiaService membresiaService;
+    
+    @Autowired
+    private HorarioEntrenamientoService horarioService;
 
     @GetMapping("/")
     public String index() {
@@ -28,26 +39,41 @@ public class indexController {
     @GetMapping("/inscripcion")
     public String inscripcionForm(@RequestParam(value = "success", required = false) String success, Model model) {
         model.addAttribute("success", success != null);
+        model.addAttribute("planes", planService.findActivePlans());
         return "inscripcion";
     }
 
     @PostMapping("/inscripcion")
-    public String handleInscripcion(@RequestParam String nombre,
-                                    @RequestParam(required = false) Integer edad,
-                                    @RequestParam(required = false) String email,
-                                    @RequestParam(required = false) String direccion,
-                                    @RequestParam(required = false) String trabajaEstudia,
-                                    @RequestParam(required = false) String tutor,
-                                    @RequestParam(required = false) String plan,
+    public String handleInscripcion(@AuthenticationPrincipal Usuario usuario,
+                                    @RequestParam Long planId,
+                                    @RequestParam(value = "dias[]") String[] dias,
+                                    @RequestParam(value = "horarios[]") String[] horarios,
                                     @RequestParam(required = false) String comentarios,
-                                    @RequestParam(required = false) String fechaPrueba,
-                                    @RequestParam(required = false) String horaPrueba) {
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            // Validar que haya al menos un horario
+            if (dias == null || horarios == null || dias.length == 0 || dias.length != horarios.length) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Debes seleccionar al menos un horario");
+                return "redirect:/inscripcion";
+            }
 
-        Inscripcion i = new Inscripcion(nombre, edad, email, direccion, trabajaEstudia, tutor, plan, comentarios, fechaPrueba, horaPrueba);
-        inscripciones.add(i);
-
-        // Redirige a la misma página con parámetro success
-        return "redirect:/inscripcion?success=true";
+            // Crear la membresía
+            Membresia membresia = membresiaService.createMembresia(usuario.getId(), planId);
+            
+            // Crear los horarios de entrenamiento
+            for (int i = 0; i < dias.length; i++) {
+                String[] horarioSplit = horarios[i].split("-");
+                if (horarioSplit.length == 2) {
+                    horarioService.createHorario(membresia.getId(), dias[i], horarioSplit[0], horarioSplit[1]);
+                }
+            }
+            
+            redirectAttributes.addFlashAttribute("successMessage", "¡Inscripción completada! Tu plan ha sido activado con los horarios seleccionados.");
+            return "redirect:/mi-plan";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/inscripcion";
+        }
     }
 
     @GetMapping("/nosotros")
@@ -64,44 +90,5 @@ public class indexController {
     @GetMapping("/galeria")
     public String galeria() {
         return "galeria";
-    }
-
-    // Clase simple para almacenar datos de inscripción en memoria
-    public static class Inscripcion {
-        public String nombre;
-        public Integer edad;
-        public String email;
-        public String direccion;
-        public String trabajaEstudia;
-        public String tutor;
-        public String plan;
-        public String comentarios;
-        public String fechaPrueba;
-        public String horaPrueba;
-
-        public Inscripcion(String nombre, Integer edad, String email, String direccion, String trabajaEstudia, String tutor, String plan, String comentarios, String fechaPrueba, String horaPrueba) {
-            this.nombre = nombre;
-            this.edad = edad;
-            this.email = email;
-            this.direccion = direccion;
-            this.trabajaEstudia = trabajaEstudia;
-            this.tutor = tutor;
-            this.plan = plan;
-            this.comentarios = comentarios;
-            this.fechaPrueba = fechaPrueba;
-            this.horaPrueba = horaPrueba;
-        }
-
-        // Getters (opcional - Thymeleaf puede acceder a campos públicos directamente)
-        public String getNombre() { return nombre; }
-        public Integer getEdad() { return edad; }
-        public String getEmail() { return email; }
-        public String getDireccion() { return direccion; }
-        public String getTrabajaEstudia() { return trabajaEstudia; }
-        public String getTutor() { return tutor; }
-        public String getPlan() { return plan; }
-        public String getComentarios() { return comentarios; }
-        public String getFechaPrueba() { return fechaPrueba; }
-        public String getHoraPrueba() { return horaPrueba; }
     }
 }

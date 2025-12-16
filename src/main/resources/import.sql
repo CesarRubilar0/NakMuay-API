@@ -41,3 +41,10 @@ INSERT INTO usuarios (rut, nombre, apellido, password, email, rol, enabled, crea
 -- 2) Ejecuta ese main con las dependencias del proyecto y copia el hash resultante en la columna
 --    `password` de las filas de `usuarios` (reemplaza las comillas vacías '').
 -- Alternativamente, puedes usar utilidades externas para generar bcrypt y pegarlas aquí.
+
+-- Planes de membresía
+INSERT INTO planes (nombre, descripcion, precio, duracion_meses, activo, created_at, updated_at) VALUES
+	('Plan Básico', 'Acceso a clases grupales 3 veces por semana', 25000, 1, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('Plan Estándar', 'Acceso ilimitado a clases grupales + 1 clase personalizada al mes', 45000, 3, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('Plan Premium', 'Acceso ilimitado + 4 clases personalizadas al mes + nutrición', 75000, 6, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+	('Plan Anual', 'Acceso total por 12 meses con descuento especial', 500000, 12, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
