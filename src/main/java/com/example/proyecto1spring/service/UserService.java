@@ -13,4 +13,5 @@ public interface UserService {
     Optional<Usuario> findByEmail(String email);
     Usuario toggleEnabled(Long id);
     Usuario updateUser(Long id, Usuario user);
+    Usuario findByEmailAsUsuario(String email);
 }

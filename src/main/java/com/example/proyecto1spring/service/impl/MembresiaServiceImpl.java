@@ -127,4 +127,23 @@ public class MembresiaServiceImpl implements MembresiaService {
         Objects.requireNonNull(usuario, "Usuario no puede ser null");
         return membresiaRepository.existsByUsuarioAndActivaTrue(usuario);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        Objects.requireNonNull(id, "ID no puede ser null");
+        membresiaRepository.deleteById(id);
+    }
+
+    @Override
+    public Membresia save(Membresia membresia) {
+        Objects.requireNonNull(membresia, "Membresía no puede ser null");
+        return membresiaRepository.save(membresia);
+    }
+
+    @Override
+    public Membresia findByUsuarioIdAndActiva(Long usuarioId, Boolean activa) {
+        Objects.requireNonNull(usuarioId, "Usuario ID no puede ser null");
+        Objects.requireNonNull(activa, "Activa no puede ser null");
+        return membresiaRepository.findByUsuarioIdAndActiva(usuarioId, activa);
+    }
 }

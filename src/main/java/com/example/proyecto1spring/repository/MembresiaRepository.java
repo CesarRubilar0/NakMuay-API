@@ -18,4 +18,6 @@ public interface MembresiaRepository extends JpaRepository<Membresia, Long> {
     List<Membresia> findByActivaTrue();
     
     boolean existsByUsuarioAndActivaTrue(Usuario usuario);
+
+    Membresia findByUsuarioIdAndActiva(Long usuarioId, Boolean activa);
 }

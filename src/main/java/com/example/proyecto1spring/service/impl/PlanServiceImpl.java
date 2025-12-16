@@ -94,4 +94,15 @@ public class PlanServiceImpl implements PlanService {
         plan.setActivo(!plan.getActivo());
         planRepository.save(plan);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        deletePlan(id);
+    }
+
+    @Override
+    public Plan save(Plan plan) {
+        Objects.requireNonNull(plan, "Plan no puede ser null");
+        return planRepository.save(plan);
+    }
 }

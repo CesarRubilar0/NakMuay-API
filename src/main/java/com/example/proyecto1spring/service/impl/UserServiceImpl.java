@@ -103,4 +103,10 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.save(u);
     }
+
+    @Override
+    public Usuario findByEmailAsUsuario(String email) {
+        java.util.Objects.requireNonNull(email, "email no puede ser nulo");
+        return userRepository.findByEmail(email).orElse(null);
+    }
 }

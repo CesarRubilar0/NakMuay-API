@@ -18,6 +18,10 @@ public interface PlanService {
     Plan updatePlan(Long id, Plan plan);
     
     void deletePlan(Long id);
+
+    void deleteById(Long id);
     
     void toggleActive(Long id);
+
+    Plan save(Plan plan);
 }

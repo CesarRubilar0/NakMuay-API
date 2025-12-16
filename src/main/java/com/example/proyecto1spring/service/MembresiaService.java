@@ -23,6 +23,12 @@ public interface MembresiaService {
     Membresia changePlan(Long membresiaId, Long nuevoPlanId);
     
     void cancelMembresia(Long membresiaId);
+
+    void deleteById(Long id);
     
     boolean hasActiveMembresia(Usuario usuario);
+
+    Membresia save(Membresia membresia);
+
+    Membresia findByUsuarioIdAndActiva(Long usuarioId, Boolean activa);
 }

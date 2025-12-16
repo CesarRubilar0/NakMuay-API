@@ -32,9 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
-node_modules
+### Node (si usas frontend) ###
+node_modules/
 
-
-IPSS-2 Año
-
-Moviles/ Demo-Pelis
+### Scripts PowerShell temporales ###
+push-to-github-automated.ps1
+cambiar-repo-y-pushear.ps1

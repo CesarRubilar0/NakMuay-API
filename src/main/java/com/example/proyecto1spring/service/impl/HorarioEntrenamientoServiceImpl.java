@@ -64,4 +64,27 @@ public class HorarioEntrenamientoServiceImpl implements HorarioEntrenamientoServ
         Objects.requireNonNull(membresia, "Membresía no puede ser null");
         horarioRepository.deleteByMembresia(membresia);
     }
+
+    @Override
+    public List<HorarioEntrenamiento> findAll() {
+        return horarioRepository.findAll();
+    }
+
+    @Override
+    public java.util.Optional<HorarioEntrenamiento> findById(Long id) {
+        Objects.requireNonNull(id, "ID no puede ser null");
+        return horarioRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(Long id) {
+        deleteHorario(id);
+    }
+
+    @Override
+    public HorarioEntrenamiento save(HorarioEntrenamiento horario) {
+        Objects.requireNonNull(horario, "Horario no puede ser null");
+        return horarioRepository.save(horario);
+    }
 }
