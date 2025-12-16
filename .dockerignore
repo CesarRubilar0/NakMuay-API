@@ -1,7 +1,10 @@
 target
 .git
 .gitignore
-.mvn
+# Incluir .mvn para que el wrapper funcione en el build
+# (se copia en el Dockerfile)
+# NO ignorar .mvn
+
 .DS_Store
 *.log
 .env
