@@ -36,8 +36,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // Permitir acceso público a recursos estáticos, consola H2, la página de login y registro
         http
-            .csrf(csrf -> csrf.disable())
             .cors(cors -> {})
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**", "/h2-console/**")
+            )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
