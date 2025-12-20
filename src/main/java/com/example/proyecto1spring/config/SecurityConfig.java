@@ -46,6 +46,10 @@ public class SecurityConfig {
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/login").permitAll()
+                // Recursos estáticos para vistas Thymeleaf
+                .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                // Swagger/OpenAPI
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/", "/index", "/index.html", "/error", "/error/**").permitAll()
                 .anyRequest().authenticated()
             )
