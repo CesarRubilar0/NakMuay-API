@@ -39,15 +39,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> {})
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/planes", "/api/planes/**").permitAll()
-                .requestMatchers("/", "/index").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form.disable())
@@ -77,13 +74,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Orígenes permitidos: localhost para desarrollo, capacitor para app móvil, y dominio de producción
-        configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:8100",
-            "capacitor://localhost"
-        ));
+        // Orígenes permitidos: reflejar el Origin recibido (localhost, capacitor, render)
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 
