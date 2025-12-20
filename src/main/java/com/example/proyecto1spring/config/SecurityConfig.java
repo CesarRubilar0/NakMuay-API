@@ -79,9 +79,7 @@ public class SecurityConfig {
         // Orígenes permitidos: localhost para desarrollo, capacitor para app móvil, y dominio de producción
         configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:8100",
-            "capacitor://localhost",
-            "http://localhost",
-            "https://nakmuay-api-nfg4.onrender.com"
+            "capacitor://localhost"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin"));
