@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/planes")
-@CrossOrigin(origins = {"http://localhost:8100", "http://localhost:4200", "*"})
 @Tag(name = "Planes", description = "Gestión de planes de entrenamiento")
 public class PlanRestController {
 

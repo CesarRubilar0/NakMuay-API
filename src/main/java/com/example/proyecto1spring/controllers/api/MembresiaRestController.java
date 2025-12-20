@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/membresias")
-@CrossOrigin(origins = {"http://localhost:8100", "http://localhost:4200", "*"})
 @Tag(name = "Membresías", description = "Gestión de membresías de usuarios")
 public class MembresiaRestController {
 
