@@ -30,6 +30,10 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        if (request == null || request.getEmail() == null || request.getPassword() == null || request.getNombre() == null) {
+            throw new IllegalArgumentException("Datos de registro incompletos");
+        }
+
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
